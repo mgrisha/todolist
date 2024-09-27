@@ -1,0 +1,11 @@
+.todo-item {
+  &__link {
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color .3s;
+
+    &:hover {
+      border-bottom-color: #0d6efd;
+    }
+  }
+}
