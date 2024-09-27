@@ -32,7 +32,7 @@ const ModalForm = (props) => {
   async function onSubmit (data) {
     let newTodoList = [];
     const { id, title, description, deadline } = data;
-    const newDeadline = returnDateFormat(new Date(deadline));
+    const newDeadline = deadline.length > 0 ? returnDateFormat(new Date(deadline)) : '';
     if (todoItem.id.length > 0) {
       const findTodoItem = todoList.find(item => item.id === todoItem.id);
       const findIndex = todoList.findIndex(item => item.id === todoItem.id);
@@ -85,7 +85,7 @@ const ModalForm = (props) => {
               name="title"
               placeholder="Введіть назву"
               {...register('title')}
-              value={'' || todoItem.title}
+              value={todoItem.title || ''}
               onChange={(e) => handleChangeInput(e)}
             />
             {errors.title && (
@@ -101,7 +101,7 @@ const ModalForm = (props) => {
               rows={3}
               name="description"
               {...register("description")}
-              value={'' || todoItem.description}
+              value={todoItem.description || ''}
               placeholder="Введіть опис"
               onChange={(e) => handleChangeInput(e)}
             />
@@ -117,7 +117,7 @@ const ModalForm = (props) => {
               type="date"
               name="deadline"
               {...register('deadline')}
-              value={returnDateFormat(new Date(todoItem.deadline))}
+              value={todoItem.deadline && returnDateFormat(new Date(todoItem.deadline)) || ''}
               onChange={(e) => handleChangeInput(e)}
             />
             {errors.deadline && (

@@ -21,6 +21,7 @@ function App() {
 
   const triggerChnageForm = () => {
     const todoForm = document.getElementById('todo-form');
+    todoForm.id.value = todoItem.id;
     todoForm.title.value = todoItem.title;
     todoForm.description.value = todoItem.description;
     todoForm.deadline.value = todoItem.deadline;
