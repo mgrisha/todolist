@@ -19,7 +19,7 @@ import { StoreContext } from './context/StoreContext';
 function App() {
   const { modalFormEvent, setModalFormEvent, setTodoItem, todoItem, setFilter } = useContext(StoreContext);
 
-  const triggerChnageForm = () => {
+  const triggerChangeForm = () => {
     const todoForm = document.getElementById('todo-form');
     todoForm.id.value = todoItem.id;
     todoForm.title.value = todoItem.title;
@@ -64,7 +64,7 @@ function App() {
       <ModalForm
         show={modalFormEvent}
         onHide={() => setModalFormEvent(false)}
-        onEnter={() => triggerChnageForm()}
+        onEnter={() => triggerChangeForm()}
       />
     </Container>
   )

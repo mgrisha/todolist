@@ -31,7 +31,7 @@ const ModalForm = (props) => {
 
   async function onSubmit (data) {
     let newTodoList = [];
-    const { id, title, description, deadline } = data;
+    const { id, title, description, deadline } = todoItem;
     const newDeadline = deadline ? returnDateFormat(new Date(deadline)) : '';
     if (todoItem.id.length > 0) {
       const findTodoItem = todoList.find(item => item.id === todoItem.id);
