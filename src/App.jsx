@@ -1,41 +1,47 @@
-import { useContext } from 'react';
+import { useContext } from "react";
 
-import './App.css';
+import "./App.css";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
 
-import TodoList from './components/todo-list'
-import ModalForm from './components/modal-form';
+import TodoList from "./components/todo-list";
+import ModalForm from "./components/modal-form";
 
-import { StoreContext } from './context/StoreContext';
+import { StoreContext } from "./context/StoreContext";
 
 function App() {
-  const { modalFormEvent, setModalFormEvent, setTodoItem, todoItem, setFilter } = useContext(StoreContext);
+  const {
+    modalFormEvent,
+    setModalFormEvent,
+    setTodoItem,
+    todoItem,
+    setFilter,
+  } = useContext(StoreContext);
 
   const triggerChangeForm = () => {
-    const todoForm = document.getElementById('todo-form');
+    const todoForm = document.getElementById("todo-form");
     todoForm.id.value = todoItem.id;
     todoForm.title.value = todoItem.title;
     todoForm.description.value = todoItem.description;
     todoForm.deadline.value = todoItem.deadline;
-  }
+  };
 
   const addNewTodoItem = () => {
     setTodoItem({
-      id: '',
-      title: '',
-      description: '',
-      deadline: ''
+      id: "",
+      title: "",
+      description: "",
+      deadline: "",
     });
-    setModalFormEvent(true)
-  }
+    setModalFormEvent(true);
+  };
 
   return (
     <Container fluid="md">
@@ -67,7 +73,7 @@ function App() {
         onEnter={() => triggerChangeForm()}
       />
     </Container>
-  )
+  );
 }
 
 export default App;

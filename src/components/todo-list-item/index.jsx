@@ -1,17 +1,18 @@
-import { useContext } from 'react';
+import { useContext } from "react";
 
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
-import styles from './TodoListItem.module.scss';
+import styles from "./TodoListItem.module.scss";
 
-import { StoreContext } from '../../context/StoreContext';
+import { StoreContext } from "../../context/StoreContext";
 
 const TodoItem = ({ todoItem, index }) => {
-  const { editTodoItem, handleChangeStatus, deleteTodoItem } = useContext(StoreContext);
+  const { editTodoItem, handleChangeStatus, deleteTodoItem } =
+    useContext(StoreContext);
 
   return (
-    <tr className={styles['todo-item']}>
+    <tr className={styles["todo-item"]}>
       <td>{index + 1}</td>
       <td>
         <Form.Check
@@ -22,13 +23,25 @@ const TodoItem = ({ todoItem, index }) => {
         />
       </td>
       <td>
-        <span className={styles['todo-item__link']} onClick={() => editTodoItem(todoItem.id)}>{todoItem.title}</span>
+        <span
+          className={styles["todo-item__link"]}
+          onClick={() => editTodoItem(todoItem.id)}
+        >
+          {todoItem.title}
+        </span>
       </td>
       <td>
-        <Button variant="danger" onClick={() => deleteTodoItem(todoItem.id)}>&times;</Button>
+        <Button
+          variant="danger"
+          onClick={() => deleteTodoItem(todoItem.id)}
+          title="Видалити"
+          size="sm"
+        >
+          &times;
+        </Button>
       </td>
     </tr>
-  )
-}
+  );
+};
 
 export default TodoItem;

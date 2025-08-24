@@ -1,69 +1,91 @@
-import { useContext } from 'react';
-import axios from 'axios';
+import { useContext } from "react";
+import axios from "axios";
 
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const schema = yup.object().shape({
   id: yup.string().required(),
-  title: yup.string().required('Назва завдання є обов\'язковою'),
-  description: yup.string().max(200, 'Опис не може перевищувати 200 символів'),
-  deadline: yup.date().nullable().typeError('Дата має бути валідною').notRequired().test('is-valid', 'Дата має бути валідною', (value) => {
-    return value === null || !isNaN(new Date(value).getTime());
-  }),
+  title: yup.string().required("Назва завдання є обов'язковою"),
+  description: yup.string().max(200, "Опис не може перевищувати 200 символів"),
+  deadline: yup
+    .date()
+    .nullable()
+    .typeError("Дата має бути валідною")
+    .notRequired()
+    .test("is-valid", "Дата має бути валідною", (value) => {
+      return value === null || !isNaN(new Date(value).getTime());
+    }),
 });
 
-import { getUID, returnDateFormat } from '../../utils/functions';
+import { getUID, returnDateFormat } from "../../utils/functions";
 
-import { StoreContext } from '../../context/StoreContext';
+import { StoreContext } from "../../context/StoreContext";
 
 const ModalForm = (props) => {
+  const {
+    todoItem,
+    handleChangeInput,
+    todoList,
+    setTodoList,
+    setModalFormEvent,
+  } = useContext(StoreContext);
 
-  const { todoItem, handleChangeInput, todoList, setTodoList, setModalFormEvent } = useContext(StoreContext);
-
-  const { register, formState: { errors }, handleSubmit } = useForm({
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
     resolver: yupResolver(schema),
   });
 
-  async function onSubmit (data) {
+  async function onSubmit() {
     let newTodoList = [];
     const { id, title, description, deadline } = todoItem;
-    const newDeadline = deadline ? returnDateFormat(new Date(deadline)) : '';
+    const newDeadline = deadline ? returnDateFormat(new Date(deadline)) : "";
     if (todoItem.id.length > 0) {
-      const findTodoItem = todoList.find(item => item.id === todoItem.id);
-      const findIndex = todoList.findIndex(item => item.id === todoItem.id);
+      const findTodoItem = todoList.find((item) => item.id === todoItem.id);
+      const findIndex = todoList.findIndex((item) => item.id === todoItem.id);
       findTodoItem.title = title;
       findTodoItem.description = description;
       findTodoItem.deadline = newDeadline;
       const tempTodoList = [...todoList];
       tempTodoList[findIndex] = findTodoItem;
       newTodoList = tempTodoList;
-      await axios.put(`http://localhost:5000/todoList/${todoItem.id}`, findTodoItem, {
-        headers: { 'Content-Type': 'application/json' }
-      });
+      await axios.put(
+        `https://e485b0084c42382b.mokky.dev/todos/${todoItem.id}`,
+        findTodoItem,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
     } else {
       const newTodoItem = {
         id,
         title,
         description,
         deadline: newDeadline,
-        status: false
-      }
-      await axios.post('http://localhost:5000/todoList', newTodoItem, {
-        headers: { 'Content-Type': 'application/json' }
-      });
+        status: false,
+      };
+      await axios.post(
+        "https://e485b0084c42382b.mokky.dev/todos",
+        newTodoItem,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       newTodoList = [...todoList, newTodoItem];
     }
     setTodoList(newTodoList);
     setModalFormEvent(false);
-  };
+  }
 
   const onError = (error) => {
-    console.log('ERROR ->', error);
+    console.log("ERROR ->", error);
   };
 
   return (
@@ -74,18 +96,23 @@ const ModalForm = (props) => {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Додати завдання</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Додати завдання
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit, onError)} id="todo-form">
-          <Form.Group className="mb-3 position-relative" controlId="exampleForm.ControlInput1">
+          <Form.Group
+            className="mb-3 position-relative"
+            controlId="exampleForm.ControlInput1"
+          >
             <Form.Label>Назва завдання</Form.Label>
             <Form.Control
               type="text"
               name="title"
               placeholder="Введіть назву"
-              {...register('title')}
-              value={todoItem.title || ''}
+              {...register("title")}
+              value={todoItem.title || ""}
               onChange={(e) => handleChangeInput(e)}
             />
             {errors.title && (
@@ -94,14 +121,17 @@ const ModalForm = (props) => {
               </Form.Text>
             )}
           </Form.Group>
-          <Form.Group className="mb-3 position-relative" controlId="exampleForm.ControlTextarea1">
+          <Form.Group
+            className="mb-3 position-relative"
+            controlId="exampleForm.ControlTextarea1"
+          >
             <Form.Label>Опис завдання</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
               name="description"
               {...register("description")}
-              value={todoItem.description || ''}
+              value={todoItem.description || ""}
               placeholder="Введіть опис"
               onChange={(e) => handleChangeInput(e)}
             />
@@ -111,13 +141,20 @@ const ModalForm = (props) => {
               </Form.Text>
             )}
           </Form.Group>
-          <Form.Group className="mb-3 position-relative" controlId="exampleForm.ControlInput2">
+          <Form.Group
+            className="mb-3 position-relative"
+            controlId="exampleForm.ControlInput2"
+          >
             <Form.Label>Дедлайн</Form.Label>
             <Form.Control
               type="date"
               name="deadline"
-              {...register('deadline')}
-              value={todoItem.deadline && returnDateFormat(new Date(todoItem.deadline)) || ''}
+              {...register("deadline")}
+              value={
+                (todoItem.deadline &&
+                  returnDateFormat(new Date(todoItem.deadline))) ||
+                ""
+              }
               onChange={(e) => handleChangeInput(e)}
             />
             {errors.deadline && (
@@ -126,12 +163,17 @@ const ModalForm = (props) => {
               </Form.Text>
             )}
           </Form.Group>
-          <input type="hidden" value={todoItem.id || getUID()} name="id" {...register('id')} />
+          <input
+            type="hidden"
+            value={todoItem.id || getUID()}
+            name="id"
+            {...register("id")}
+          />
           <Button type="submit">Зберегти</Button>
         </Form>
       </Modal.Body>
     </Modal>
-  )
-}
+  );
+};
 
-export default ModalForm
+export default ModalForm;
